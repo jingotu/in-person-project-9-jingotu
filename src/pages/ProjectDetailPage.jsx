@@ -1,16 +1,17 @@
 // TODO: Import useParams and useNavigate from react-router-dom
+import { useParams, useNavigate } from 'react-router-dom'
 import { projects } from '../data/projects'
 
 function ProjectDetailPage() {
   // TODO: Get the project id from the URL using useParams
-  // const { id } = useParams()
+  const { id } = useParams()
 
   // TODO: Set up navigation using useNavigate
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
   // TODO: Find the project based on the id
   // For now, just showing the first project as placeholder
-  const project = projects[0]
+  const project = projects.find((p) => p.id === id)
 
   // TODO: Handle case where project is not found
   if (!project) {
@@ -18,6 +19,12 @@ function ProjectDetailPage() {
       <div className="error-page">
         <h2>Project not found</h2>
         {/* TODO: Add button to navigate back to projects page */}
+        <button
+          className="btn btn-primary"
+          onClick={() => navigate('/projects')}
+        >
+          Back to Projects
+        </button>
       </div>
     )
   }
@@ -25,7 +32,12 @@ function ProjectDetailPage() {
   return (
     <div className="project-detail-page">
       {/* TODO: Add a back button using navigate(-1) */}
-
+      <button
+        className="btn btn-secondary"
+        onClick={() => navigate(-1)}
+      >
+        ← Back
+      </button>
       <article className="project-detail">
         <header className="project-header">
           <h1>{project.title}</h1>
@@ -59,12 +71,12 @@ function ProjectDetailPage() {
             {project.features?.map((feature, index) => (
               <li key={index}>{feature}</li>
             )) || (
-              <>
-                <li>Responsive design</li>
-                <li>Modern UI/UX</li>
-                <li>Performance optimized</li>
-              </>
-            )}
+                <>
+                  <li>Responsive design</li>
+                  <li>Modern UI/UX</li>
+                  <li>Performance optimized</li>
+                </>
+              )}
           </ul>
 
           <div className="project-links">

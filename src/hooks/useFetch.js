@@ -9,7 +9,9 @@ import { useState, useEffect } from 'react'
 
 export function useFetch(url) {
   // TODO: Set up state for data, loading, and error
-
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   // TODO: Use useEffect to fetch data when URL changes
   // Remember to:
   // - Create an AbortController for cleanup
@@ -18,11 +20,43 @@ export function useFetch(url) {
   // - Return cleanup function that aborts the fetch
 
   // For now, return mock data so the app doesn't break
-  return {
-    data: null,
-    loading: false,
-    error: null
-  }
+  useEffect(() => {
+    const controller = new AbortController()
+
+    const fetchData = async () => {
+      setLoading(true)
+      setError(null)
+      setData(null)
+
+      try {
+        const response = await fetch(url, {
+          signal: controller.signal
+        })
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+
+        const result = await response.json()
+        setData(result)
+
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          setError(err)
+        }
+
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false)
+        }
+      }
+    }
+
+    fetchData()
+
+    return () => controller.abort()
+  }, [url])
+  return { data, loading, error }
 }
 
 // Example implementation structure:

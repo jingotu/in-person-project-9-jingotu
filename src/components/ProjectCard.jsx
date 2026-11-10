@@ -1,8 +1,9 @@
 // Component for displaying project cards in the grid
+import { Link } from 'react-router-dom'
 
 function ProjectCard({ project }) {
   return (
-    <div className="project-card">
+    <Link to={`/projects/${project.id}`} className="project-card">
       {project.imageUrl && (
         <img
           src={project.imageUrl}
@@ -25,7 +26,7 @@ function ProjectCard({ project }) {
           )}
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 
